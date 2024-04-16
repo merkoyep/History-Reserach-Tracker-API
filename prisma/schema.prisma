@@ -29,6 +29,7 @@ model Source {
   publishedBy     String?
   edition         Int?
   volume          Int?
+  url             String?
   userId          Int
   user            User       @relation(fields: [userId], references: [id])
   citation        Citation[]

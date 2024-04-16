@@ -1,0 +1,9 @@
+<div>
+  {{#each sources}}
+    <div class='border m-2' id='sourceContainer'>
+      <h2>{{this.title}}</h2>
+      <p>{{this.authorFirstName}} {{this.authorLastName}}</p>
+      <a href='/source/{{this.id}}'>View</a>
+    </div>
+  {{/each}}
+</div>

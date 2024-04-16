@@ -1,0 +1,70 @@
+<form method='POST' action='/source/{{source.id}}?_method=PUT'>
+  <fieldset>
+    <legend>"Edit {{source.title}}"</legend>
+    <p>
+      <label for='title'>Source Title</label><br />
+      <input type='text' id='title' name='title' value='{{source.title}}' />
+    </p>
+    <p>
+      <label for='authorFirstName'>Author's First Name</label><br />
+      <input
+        type='text'
+        id='authorFirstName'
+        name='authorFirstName'
+        value='{{source.authorFirstName}}'
+      />
+    </p>
+    <p>
+      <label for='authorLastName'>Author's Last Name</label><br />
+      <input
+        type='text'
+        id='authorLastName'
+        name='authorLastName'
+        value='{{source.authorLastName}}'
+      />
+    </p>
+    <p>
+      <label for='publishDate'>Date Published</label><br />
+      <input
+        type='date'
+        id='publishDate'
+        name='publishDate'
+        value='{{source.publishDate}}'
+      />
+    </p>
+    <p>
+      <label for='publishedBy'>Publisher</label><br />
+      <input
+        type='text'
+        id='publishedBy'
+        name='publishedBy'
+        value='{{source.publishedBy}}'
+      />
+    </p>
+    <p>
+      <label for='edition'>Edition</label><br />
+      <input
+        type='number'
+        id='edition'
+        name='edition'
+        value='{{source.edition}}'
+      />
+    </p>
+    <p>
+      <label for='volume'>Volume</label><br />
+      <input
+        type='number'
+        id='volume'
+        name='volume'
+        value='{{source.volume}}'
+      />
+    </p>
+  </fieldset>
+
+  <p>
+    <button type='submit'>Update</button>
+  </p>
+</form>
+<form action='/source/{{source.id}}?_method=DELETE' method='POST'>
+  <button type='submit' class='btn btn-danger'>Delete</button>
+</form>

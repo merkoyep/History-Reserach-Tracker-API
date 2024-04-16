@@ -21,12 +21,6 @@ module.exports = function (app, prisma) {
 
   app.post('/signup', async (req, res) => {
     const { username, password } = req.body;
-    console.log(
-      'Signup request received with username:',
-      username,
-      'and password:',
-      password
-    );
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = await prisma.user.create({
