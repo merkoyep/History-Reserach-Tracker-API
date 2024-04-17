@@ -1,9 +1,10 @@
 const moment = require('moment');
-module.exports = function (app, prisma) {
+module.exports = function (app, prisma, authenticateToken) {
   app.get('/source/new', async (req, res) => {
+    console.log(res.locals.currentUser);
     res.render('source-new', {});
   });
-  app.get('/source', async (req, res) => {
+  app.get('/source', authenticateToken, async (req, res) => {
     const sources = await prisma.source.findMany();
     const formattedSources = sources.map((source) => {
       return {
@@ -13,7 +14,7 @@ module.exports = function (app, prisma) {
     });
     res.render('source-index', { sources: formattedSources });
   });
-  app.get('/source/:id', async (req, res) => {
+  app.get('/source/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
     try {
       const source = await prisma.source.findUnique({
@@ -30,7 +31,7 @@ module.exports = function (app, prisma) {
       res.status(500).send('Server error');
     }
   });
-  app.get('/source/:id/edit', async (req, res) => {
+  app.get('/source/:id/edit', authenticateToken, async (req, res) => {
     const { id } = req.params;
     try {
       const source = await prisma.source.findUnique({
@@ -49,7 +50,7 @@ module.exports = function (app, prisma) {
     }
   });
 
-  app.post('/source/new', async (req, res) => {
+  app.post('/source/new', authenticateToken, async (req, res) => {
     const {
       title,
       authorFirstName,
@@ -86,7 +87,7 @@ module.exports = function (app, prisma) {
       res.status(500).send('Server error');
     }
   });
-  app.put('/source/:id', async (req, res) => {
+  app.put('/source/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
     const {
       title,
@@ -116,7 +117,7 @@ module.exports = function (app, prisma) {
       res.status(500).send('Server error');
     }
   });
-  app.delete('/source/:id', async (req, res) => {
+  app.delete('/source/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
     try {
       await prisma.source.delete({

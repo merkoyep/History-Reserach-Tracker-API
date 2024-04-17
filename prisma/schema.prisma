@@ -38,7 +38,8 @@ model Source {
 model Citation {
   id       Int      @id @default(autoincrement())
   title    String
-  source   Source[]
+  sourceId Int
+  source   Source   @relation(fields: [sourceId], references: [id])
   location String?
   notes    String
 }

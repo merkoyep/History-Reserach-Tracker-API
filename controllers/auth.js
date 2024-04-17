@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const users = [];
-
+// Generates token based on user
 function generateToken(user) {
   return jwt.sign(
     { id: user.id, username: user.username },
@@ -12,16 +12,25 @@ function generateToken(user) {
 }
 
 module.exports = function (app, prisma) {
+  //signup route
   app.get('/signup', async (req, res) => {
     res.render('auth-signup');
   });
+
+  //login route
   app.get('/login', async (req, res) => {
     res.render('auth-login');
   });
-
+  //logout route
+  app.get('/logout', (req, res, next) => {
+    res.clearCookie('jwt');
+    return res.redirect('/');
+  });
+  //signup post route
   app.post('/signup', async (req, res) => {
     const { username, password } = req.body;
     try {
+      //devine hashed password
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = await prisma.user.create({
         data: {
@@ -29,7 +38,7 @@ module.exports = function (app, prisma) {
           password: hashedPassword,
         },
       });
-      res.status(201).send('User registered');
+      res.redirect('/');
     } catch (error) {
       res.status(500).send(error.message);
     }
@@ -38,6 +47,7 @@ module.exports = function (app, prisma) {
   app.post('/login', async (req, res) => {
     const { username, password } = req.body;
     try {
+      //Query user
       const user = await prisma.user.findUnique({
         where: {
           username,
@@ -46,18 +56,18 @@ module.exports = function (app, prisma) {
       if (!user) {
         return res.status(401).send('Authentication failed');
       }
-
+      //validate password
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         return res.status(401).send('Authentication failed');
       }
-
+      //asign token
       const token = generateToken(user);
       res.cookie('jwt', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
       });
-      res.send('Logged in successfully');
+      res.redirect('/dashboard');
     } catch (error) {
       res.status(500).send(error.message);
     }

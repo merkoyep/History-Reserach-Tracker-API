@@ -21,6 +21,9 @@ app.engine(
   engine({
     defaultLayout: 'main',
     handlebars: allowInsecurePrototypeAccess(Handlebars),
+    helpers: {
+      eq: (v1, v2) => v1 === v2,
+    },
   })
 );
 app.set('view engine', 'handlebars');
@@ -33,34 +36,48 @@ function authenticateToken(req, res, next) {
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
+      console.error('JQT Verification Error:', err);
       return res.sendStatus(403); // if the token is invalid or expired
     }
     req.user = decoded;
     next();
   });
 }
+function optionalAuthenticateToken(req, res, next) {
+  const token = req.cookies.jwt;
+  if (!token) {
+    return next(); // No token present, continue without setting req.user
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (!err) {
+      req.user = decoded;
+    }
+    next(); // Continue regardless of token validity
+  });
+}
+
+app.use(optionalAuthenticateToken);
 // Set currentUser
 
 app.use((req, res, next) => {
   if (req.user && req.user.id) {
     prisma.user
       .findUnique({
-        where: {
-          id: req.user.id,
-        },
+        where: { id: req.user.id },
       })
       .then((currentUser) => {
         if (currentUser) {
           res.locals.currentUser = currentUser;
-        } else {
         }
         next();
       })
       .catch((err) => {
+        console.error('Error fetching user:', err);
         next();
       });
   } else {
-    next();
+    next(); // No user found in token, proceed without setting currentUser
   }
 });
 
@@ -70,13 +87,20 @@ app.get('/protected', authenticateToken, (req, res) => {
 });
 
 app.get('/', async (req, res) => {
-  res.send('Hello World!');
+  res.render('home');
+});
+
+app.get('/dashboard', authenticateToken, async (req, res) => {
+  const citations = await prisma.citation.findMany();
+  const sources = await prisma.source.findMany();
+  res.render('dashboard', { sources: sources, citations: citations });
 });
 
 // Controllers
 
 require('./controllers/auth')(app, prisma);
-require('./controllers/source')(app, prisma);
+require('./controllers/source')(app, prisma, authenticateToken);
+require('./controllers/citation')(app, prisma, authenticateToken);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

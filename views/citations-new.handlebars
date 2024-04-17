@@ -1,0 +1,28 @@
+<form method='POST' action='/citations/new'>
+  <fieldset>
+    <legend>"Add new citation"</legend>
+    <p>
+      <label for='title'>Citation Title</label><br />
+      <input type='text' id='title' name='title' required />
+    </p>
+    <p>
+      <label for='sourceId'>source</label><br />
+      <select id='sourceId' name='sourceId'>
+        {{#each sources}}
+          <option value={{id}}>{{title}}</option>
+        {{/each}}
+      </select>
+    </p>
+    <p>
+      <label for='location'>Citation Location</label><br />
+      <input type='text' id='location' name='location' />
+    </p>
+    <p>
+      <label for='notes'>Notes</label><br />
+      <input type='text' id='notes' name='notes' />
+    </p>
+  </fieldset>
+  <p>
+    <button type='submit'>Submit</button>
+  </p>
+</form>

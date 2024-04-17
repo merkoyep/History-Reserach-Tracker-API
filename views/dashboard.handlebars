@@ -1,0 +1,19 @@
+<main>
+  <section>
+    <h2><a href='/source'>Sources</a></h2>
+    <ul>
+      {{#each sources}}
+        <li><a href='/source/{{this.id}}'>{{this.title}}</a></li>
+      {{/each}}
+    </ul>
+  </section>
+  <section>
+    <h2><a href='citations'>Citations</a></h2>
+    <ul>
+      {{#each citations}}
+        <li><a href='/citations/{{this.id}}'>{{this.title}}</a></li>
+      {{/each}}
+    </ul>
+  </section>
+
+</main>
