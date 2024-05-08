@@ -26,7 +26,7 @@ const Citation = ({ citation }) => {
   });
   return (
     <div className='flex flex-col border-solid border-2 rounded-xl m-4 p-4 lg:justify-between gap-8'>
-      <h2 className='self-start text-2xl underline'>
+      <h2 className='self-start text-2xl underline text-start'>
         <a href={`/citation/${citation.id}`}>{citation.title}</a>
       </h2>
       <p className='self-end'>

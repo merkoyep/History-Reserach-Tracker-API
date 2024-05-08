@@ -110,7 +110,7 @@ const CitationDetail = () => {
         <section className='flex flex-col gap-2 items-start border-solid border-2 m-4 rounded-xl p-3'>
           <div className='flex justify-between w-full'>
             {' '}
-            <h2 className='text-2xl'>{citation.title}</h2>
+            <h2 className='text-start text-2xl'>{citation.title}</h2>
             <button
               className='self-end bg-gray-200 px-3 py-1 rounded-xl drop-shadow-xl'
               onClick={handleEditModalOpen}

@@ -61,7 +61,7 @@ const Home = () => {
 
       <form onSubmit={handleLogin} className='flex flex-col items-start w-full'>
         <div className='py-5 flex flex-col items-start w-full px-3 gap-2'>
-          <label>Email</label>
+          <label for='email'>Email</label>
           <input
             type='text'
             name='email'
@@ -71,7 +71,7 @@ const Home = () => {
           />
         </div>
         <div className='py-5 flex flex-col items-start w-full px-3 gap-2'>
-          <label>Password</label>
+          <label for='password'>Password</label>
           <input
             type='password'
             name='password'
